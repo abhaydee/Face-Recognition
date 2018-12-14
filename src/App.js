@@ -4,6 +4,7 @@ import Logo from './components/Logo/Logo.js';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import './App.css';
 import Rank from './components/Rank/Rank.js';
+import Signin from './components/Signin/signin';
 import Particles from 'react-particles-js';
 import clarifai from 'clarifai';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.js';
@@ -57,17 +58,14 @@ class App extends Component {
   }
   onButtonSubmit = () => {
     this.setState({ ImageUrl: this.state.input });
-    app.models.predict(clarifai.FACE_DETECT_MODEL, this.state.input).then(
-      function (response) {
+    app.models.predict(clarifai.FACE_DETECT_MODEL, this.state.input)
+      .then(response => {
         // do something with response
-        this.displayFaceBox(this.CalculateFaceLocation(response));
-        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
-      },
-      function (err) {
-        // there was an error
-        console.log(err);
-      }
-    );
+        this.displayFaceBox(this.CalculateFaceLocation(response))
+      })
+      .catch(err => console.log(err));
+
+
   }
   render() {
     return (
@@ -75,10 +73,11 @@ class App extends Component {
         <Particles className="particles"
           params={particlesoptions} />
         <Logo />
+        <Signin />
         <Navigation />
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />
         <Rank />
-        <FaceRecognition box={this.state(box)} ImageUrl={this.state.ImageUrl} />
+        <FaceRecognition box={this.state.box} ImageUrl={this.state.ImageUrl} />
       </div>
     );
   }
